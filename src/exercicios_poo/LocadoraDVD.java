@@ -1,6 +1,7 @@
 package exercicios_poo;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class LocadoraDVD {
@@ -17,13 +18,26 @@ public class LocadoraDVD {
     public void addDVD(Scanner input){
 //        Scanner input = new Scanner(System.in);
         System.out.println("Digite o nome do DVD: ");
-        String nome_dvd = input.nextLine();
+        String nome_dvd = input.nextLine().toLowerCase();
         this.dvds.add(nome_dvd);
         System.out.println("Digite o preço de alocação: ");
         Float preco = input.nextFloat();
         this.precos.add(preco);
         System.out.println("DVD adicionado com sucesso");
 //        input.close();
+    }
+
+    public void excluirDVD(Scanner input){
+        System.out.println("Digite o nome do dvd para excluí-lo: ");
+        String nome_dvd = input.nextLine().toLowerCase();
+        if (this.dvds.contains((nome_dvd))){
+            int index = this.dvds.indexOf(nome_dvd);
+            this.dvds.remove(index);
+            this.precos.remove(index);
+            System.out.println("DVD excluido com sucesso!");
+        }else{
+            System.out.println("DVD não existe!");
+        }
     }
 
     public static int menu(Scanner input){
@@ -39,10 +53,6 @@ public class LocadoraDVD {
             try {
                 System.out.println("Digite a operação: ");
                 operacao = input.nextInt();
-
-                if (operacao == 3){
-                    input.close();
-                }
                 break;
             }
             catch (Exception e){
@@ -58,6 +68,30 @@ public class LocadoraDVD {
         return operacao;
     }
 
+    public void menuAdministrativo(Scanner input){
+        System.out.println("=========Menu Administrativo=========");
+        System.out.printf("1 - Adicionar DVD%n" +
+                          "2 - Remover DVD%n" +
+                          "0 - Voltar ao menu anterior%n");
+        System.out.println("=====================================");
+        while (true){
+            System.out.println("Digite a operação desejada: ");
+            int operacao = input.nextInt();
+            input.nextLine(); // limpa buffer
+            if (operacao == 1){
+                this.addDVD(input);
+            }
+            else if (operacao == 2){
+                this.excluirDVD(input);
+            } else if (operacao == 0) {
+                System.out.println("Saindo do menu administrativo...");
+                break;
+            } else{
+                System.out.println("Operação inválida");
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         LocadoraDVD locadora = new LocadoraDVD("90's movie", "Av. Fernandes Lima, nº 134, Maceió - AL");
@@ -71,7 +105,7 @@ public class LocadoraDVD {
                 System.out.println("Entrou na opção 2");
             }
             else if (operacao == 3){
-                locadora.addDVD(input);
+                locadora.menuAdministrativo(input);
             }
             else if (operacao == 4){
                 System.out.println("Saindo da aplicação...");
